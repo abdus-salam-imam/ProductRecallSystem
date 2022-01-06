@@ -1,0 +1,99 @@
+﻿@model ProductRecallSystem.Models.Recall
+
+@{
+    ViewData["Title"] = "CreateOrEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h4>Recall</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateOrEdit">
+            <input type="hidden" asp-for="RecallId" />
+
+            <div class="form-group">
+                <label asp-for="RecallId" class="control-label"></label>
+
+
+                <select class="form-control" id="manufacturers">
+                    <option>---Please Select-----</option>
+
+
+                </select>
+
+            </div>
+
+
+
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+
+    $(document).ready(function () {
+
+        $.ajax({
+
+            type: 'GET',
+            url: "/Recall/GetManufacturers",
+            success: function (result) {
+
+                console.log(result);
+
+                $("#manufacturers").html('');
+                $("#manufacturers").html("<option>----Please Select-----</option>");
+
+                var html;
+
+                for (var i = 0; i < result.length; i++) {
+
+
+                    html += '<option value = ' + result[i].ManufacturerId + '>' + result[i].name + '</option>'
+
+                }
+
+                $("#manufacturers").append(html);
+
+
+            },
+            error: function (error) {
+
+                alert(error);
+            }
+
+
+
+        });
+
+
+    })
+
+
+
+</script>
+
