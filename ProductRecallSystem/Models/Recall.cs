@@ -15,7 +15,13 @@ namespace ProductRecallSystem.Models
         public DateTime EndDate { get; set; }
 
         public virtual IEnumerable<Product>  Products { get; set; }
+
+        public virtual Manufacturer Manufacturer { get; set; }
         
+        [NotMapped]
+        public SelectList ManufactureList { get; set; }
+
+
 
 
     }

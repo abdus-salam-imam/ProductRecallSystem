@@ -26,7 +26,14 @@ namespace ProductRecallSystem.Controllers
             if (id > 0)
             {
                 obj = _context.Recalls.Find(id);
+               
+
             }
+
+            var manufacturerList = new SelectList(_context.Manufacturers.ToList(), "ManufacturerId", "Name");
+
+            obj.ManufactureList = manufacturerList;
+
 
             return View(obj);
         }
