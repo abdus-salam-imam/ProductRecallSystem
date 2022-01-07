@@ -74,5 +74,13 @@ namespace ProductRecallSystem.Controllers
             return Json(Manufacturerlist);
         }
 
+        public JsonResult GetProducts(int id)
+        {
+            
+            var Productlist = _context.Products.ToList();
+
+            return Json(Productlist);
+        }
+
     }
 }
