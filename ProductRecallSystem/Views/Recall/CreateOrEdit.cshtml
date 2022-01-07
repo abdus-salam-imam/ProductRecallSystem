@@ -10,21 +10,21 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateOrEdit">
+        <form asp-action="CreateOrEdit" >
             <input type="hidden" asp-for="RecallId" />
 
 
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="Manufacturer.ManufacturerId" class="control-label"></label>
                 <select asp-for="Manufacturer.ManufacturerId" class="form-control" asp-items="Model.ManufactureList"></select>
                 <span asp-validation-for="Manufacturer.ManufacturerId" class="text-danger"></span>
-            </div>
+            </div>*@
 
 
 
 
-            @*<div class="form-group">
-            <label asp-for="Manufacturer.ManufacturerId" class="control-label"></label>
+            <div class="form-group" >
+            <label asp-for="Manufacturer" class="control-label"></label>
 
 
             <select class="form-control" id="manufacturers">
@@ -33,7 +33,7 @@
 
             </select>
 
-        </div>*@
+        </div>
 
 
 

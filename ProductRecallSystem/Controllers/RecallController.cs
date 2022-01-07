@@ -30,7 +30,7 @@ namespace ProductRecallSystem.Controllers
 
             }
 
-            var manufacturerList = new SelectList(_context.Manufacturers.ToList(), "ManufacturerId", "Name");
+            var manufacturerList = new SelectList(_context.Manufacturers.ToList(), "ManufacturerId", "Name",selectedValue:false); ;
 
             obj.ManufactureList = manufacturerList;
 
