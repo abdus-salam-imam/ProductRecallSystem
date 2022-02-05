@@ -5,9 +5,31 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<br>
 
-<h4>Manufacturer</h4>
+<h4 class="btn btn-dark">@Model.Title</h4>
+
 <hr />
+
+@if (TempData["Error Message"] != null)
+{
+    <div class="alert alert-dismissible alert-danger">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>Error!</strong>
+        <p>@TempData["Error Message"].ToString()</p>
+    </div>
+}
+
+@if (TempData["Success Message"] != null)
+{
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>Success!</strong>
+        <p>@TempData["Success Message"].ToString()</p>
+    </div>
+}
+
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateOrEdit">
@@ -38,10 +60,17 @@
                 <input asp-for="ZipCode" class="form-control" />
                 <span asp-validation-for="ZipCode" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
 
+</div>
+<br>
+
+<div>
+
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>

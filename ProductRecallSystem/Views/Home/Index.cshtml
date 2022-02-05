@@ -1,7 +1,81 @@
-﻿@*
+﻿@*@model ViewModel.HomeViewModel*@
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
 
-<h1>Hello My Friend</h1>
+<div class="row">
+
+    <div class="col-sm-6">
+
+        <div class="card border-primary mb-3" style="max-width: 40rem;">
+            <div class="card-header">List Products on Recalls</div>
+            <div class="card-body" id="recallList">
+                @*<partial name="RecallList" model="@Model.RecallList"/>*@
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="col-sm-6">
+
+        <div class="card border-primary mb-3" style="max-width: 40rem;">
+            <div class="card-header">List of Announcements</div>
+            <div class="card-body" id="announcementList">
+                @*<partial name="_pvAnnouncementList" model="@Model.AnnouncementList"/>*@ 
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    $(function () {
+        LoadRecallList();
+        LoadAnnouncmentList();
+
+    });
+    function LoadRecallList() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("RecallList", "Home")',
+            success: function (response) {
+                $('#recallList').append(response);
+
+            },
+            error: function (error) {
+
+                alert(error.responseText);
+            }
+        });
+
+    }
+
+    function LoadAnnouncmentList() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("AnnouncementList", "Home")',
+            success: function (response) {
+                $('#announcementList').append(response);
+
+            },
+            error: function (error) {
+
+                alert(error.responseText);
+            }
+        });
+    }
+
+</script>
+
+
+
+
+
+
+

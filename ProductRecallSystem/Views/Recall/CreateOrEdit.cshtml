@@ -5,9 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<h4>Recall</h4>
+<br>
+<h4 class="btn btn-dark">@Model.Title</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateOrEdit">
@@ -15,33 +16,38 @@
 
 
             @*<div class="form-group">
-            <label asp-for="Manufacturer.ManufacturerId" class="control-label"></label>
-            <select asp-for="Manufacturer.ManufacturerId" class="form-control" asp-items="Model.ManufactureList"></select>
-            <span asp-validation-for="Manufacturer.ManufacturerId" class="text-danger"></span>
-        </div>*@
+                    <label asp-for="Manufacturer.ManufacturerId" class="control-label"></label>
+                    <select asp-for="Manufacturer.ManufacturerId" class="form-control" asp-items="Model.ManufactureList"></select>
+                    <span asp-validation-for="Manufacturer.ManufacturerId" class="text-danger"></span>
+                </div>*@
 
 
 
 
             <div class="form-group">
-                <label asp-for="Manufacturer" class="control-label"></label>
+                <label asp-for="ManufacturerId" class="control-label"></label>
 
 
-                <select class="form-control" id="manufacturers">
-                    <option>---Please Select-----</option>
+                <select asp-for="ManufacturerId" asp-items="Model.ManufactureList" id="manufacturers" class="form-control"></select>
 
 
-                </select>
+
+
+                @*<select class="form-control" id="manufacturers" asp-for="ManufacturerId"  >
+                        <option>---Please Select---</option>
+
+
+                    </select>*@
 
             </div>
+
+
+
             <div class="form-group">
-                <label asp-for="Products" class="control-label"></label>
+                <label asp-for="ProductId" class="control-label"></label>
 
 
-                <select class="form-control" id="products">
-                    <option>---Please Select-----</option>
-
-
+                <select class="form-control" id="products" asp-for="ProductId">
                 </select>
 
             </div>
@@ -64,6 +70,7 @@
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -71,87 +78,106 @@
     </div>
 </div>
 
+<br>
+
+<div>
+
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>
+
 
 <script>
 
+    //$(document).ready(function () {
+
+    //    $.ajax({
+
+    //        type: 'GET',
+    //        url: "/Recall/GetManufacturers",
+    //        success: function (result) {
+
+    //            console.log(result);
+
+    //            $("#manufacturers").html('');
+    //            $("#manufacturers").html("<option>----Please Select-----</option>");
+
+    //            var html;
+
+    //            for (var i = 0; i < result.length; i++) {
+
+
+    //                html += '<option value = ' + result[i].manufacturerId + '>' + result[i].name + '</option>'
+
+    //            }
+
+    //            $("#manufacturers").append(html);
+
+
+    //        },
+    //        error: function (error) {
+
+    //            alert(error);
+    //        }
+
+
+
+    //    });
+
+
+    //})
+
+
+    //$.ajax({
+    //    type: 'Get',
+    //    url: '/Recall/GetproductList',
+    //    success: function (result) {
+    //        console.log(result);
+
+    //        $('#products').html();
+    //        $("#products").html("<option></option>");
+
+    //        var html;
+    //        for (var i = 0; i < result.length; i++) {
+
+    //            html += '<option value = ' + result[i].productId + '>' + result[i].name + '</option>'
+    //        }
+
+    //        $("#products").append(html);
+
+
+
+    //    },
+    //    error: function (error) {
+
+    //        error.log();
+    //    }
+
+
+    //})
+
+
 
     $(document).ready(function () {
+        debugger;
+        $('#manufacturers').change(function () {
+            $.get("/Recall/GetproductList", { ManufacturerId: $('#manufacturers').val() }, function (data) {
+                $("#products").empty();
 
-        $.ajax({
-
-            type: 'GET',
-            url: "/Recall/GetManufacturers",
-            success: function (result) {
-
-                console.log(result);
-
-                $("#manufacturers").html('');
-                $("#manufacturers").html("<option>----Please Select-----</option>");
-
-                var html;
-
-                for (var i = 0; i < result.length; i++) {
+                $.each(data, function (index, row) {
 
 
-                    html += '<option value = ' + result[i].ManufacturerId + '>' + result[i].name + '</option>'
-
-                }
-
-                $("#manufacturers").append(html);
+                    $('#products').append("<option value = '" + row.productId + "'>" + row.name + "</option>")
 
 
-            },
-            error: function (error) {
+                });
 
-                alert(error);
-            }
-
+            });
 
 
         });
 
 
-    })
-
-    $(document).ready(function () {
-
-        $.ajax({
-
-            type: 'GET',
-            url: "/Recall/GetProducts",
-            success: function (result) {
-
-                console.log(result);
-
-                $("#products").html('');
-                $("#products").html("<option>---------------------</option>");
-
-                var html;
-
-                for (var i = 0; i < result.length; i++) {
-
-
-                    html += '<option value = ' + result[i].ProductId + '>' + result[i].name + '</option>'
-
-                }
-
-                $("#products").append(html);
-
-
-            },
-            error: function (error) {
-
-                alert(error);
-            }
-
-
-
-        });
-
-
-    })
-
-
+    });
 
 
 

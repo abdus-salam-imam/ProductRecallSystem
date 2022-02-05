@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProductRecallSystem.Data;
 using ProductRecallSystem.Models;
 using System;
@@ -13,7 +14,29 @@ namespace ProductRecallSystem.Controllers
         MyDbContext _context = new MyDbContext();
         public IActionResult Index()
         {
-            var list = _context.Manufacturers.ToList();
+            var list = _context.Manufacturers.Include(x=>x.Products)
+                .Select(y=> new Manufacturer
+                {
+                ManufacturerId = y.ManufacturerId,
+                Name=y.Name,
+                City=y.City,
+                Address=y.Address,
+                State=y.State,
+                ZipCode=y.ZipCode,
+                
+                    Products=y.Products.Select(m=> new Product {
+                    
+                    ProductId=m.ProductId,
+                    Name=m.Name,
+                    Price=m.Price
+
+
+                })
+
+                })
+                
+                .ToList();
+
 
             return View(list);
         }
@@ -35,27 +58,39 @@ namespace ProductRecallSystem.Controllers
         [HttpPost]
         public IActionResult CreateOrEdit(Manufacturer model)
         {
-
-            if (ModelState.IsValid)
+            try
             {
-                if (model.ManufacturerId > 0)
+                if (ModelState.IsValid)
                 {
-                    _context.Manufacturers.Update(model);
+                    if (model.ManufacturerId > 0) //Update
+                    {
+                        _context.Manufacturers.Update(model);
+                    }
+                    else //insert
+                    {
+                        _context.Manufacturers.Add(model);
+                    }
+                    _context.SaveChanges();
+
+                    TempData["Success Message"] = "Record Saved Successfully";
+                    return RedirectToAction(nameof(Index));
+
                 }
                 else
                 {
-                    _context.Manufacturers.Add(model);
+
+                    return View();
                 }
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
 
             }
-            else
+            catch (Exception ex)
             {
-
-                return View();
+                //log
+                TempData["Error Message"] = "Error Message:" + ex.Message;
+                return RedirectToAction(nameof(CreateOrEdit));
             }
-        
+
+         
         
         }
 

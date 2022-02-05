@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductRecallSystem.Data;
 
 namespace ProductRecallSystem.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220111225726_Restructure Database")]
+    partial class RestructureDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,12 +34,7 @@ namespace ProductRecallSystem.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RecallId")
-                        .HasColumnType("int");
-
                     b.HasKey("AnnouncementId");
-
-                    b.HasIndex("RecallId");
 
                     b.ToTable("Announcements");
                 });
@@ -85,14 +82,9 @@ namespace ProductRecallSystem.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("ProductId1")
-                        .HasColumnType("int");
-
                     b.HasKey("ProductId");
 
                     b.HasIndex("ManufacturerId");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("Products");
                 });
@@ -103,6 +95,9 @@ namespace ProductRecallSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AnnouncementId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -121,22 +116,13 @@ namespace ProductRecallSystem.Migrations
 
                     b.HasKey("RecallId");
 
+                    b.HasIndex("AnnouncementId");
+
                     b.HasIndex("ManufacturerId");
 
                     b.HasIndex("ProductId");
 
                     b.ToTable("Recalls");
-                });
-
-            modelBuilder.Entity("ProductRecallSystem.Models.Announcement", b =>
-                {
-                    b.HasOne("ProductRecallSystem.Models.Recall", "Recall")
-                        .WithMany("Announcements")
-                        .HasForeignKey("RecallId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recall");
                 });
 
             modelBuilder.Entity("ProductRecallSystem.Models.Product", b =>
@@ -147,15 +133,15 @@ namespace ProductRecallSystem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProductRecallSystem.Models.Product", null)
-                        .WithMany("Products")
-                        .HasForeignKey("ProductId1");
-
                     b.Navigation("Manufacturer");
                 });
 
             modelBuilder.Entity("ProductRecallSystem.Models.Recall", b =>
                 {
+                    b.HasOne("ProductRecallSystem.Models.Announcement", "Announcement")
+                        .WithMany("Recalls")
+                        .HasForeignKey("AnnouncementId");
+
                     b.HasOne("ProductRecallSystem.Models.Manufacturer", "Manufacturer")
                         .WithMany()
                         .HasForeignKey("ManufacturerId");
@@ -164,24 +150,21 @@ namespace ProductRecallSystem.Migrations
                         .WithMany()
                         .HasForeignKey("ProductId");
 
+                    b.Navigation("Announcement");
+
                     b.Navigation("Manufacturer");
 
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ProductRecallSystem.Models.Announcement", b =>
+                {
+                    b.Navigation("Recalls");
+                });
+
             modelBuilder.Entity("ProductRecallSystem.Models.Manufacturer", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("ProductRecallSystem.Models.Product", b =>
-                {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("ProductRecallSystem.Models.Recall", b =>
-                {
-                    b.Navigation("Announcements");
                 });
 #pragma warning restore 612, 618
         }

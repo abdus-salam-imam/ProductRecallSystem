@@ -5,11 +5,32 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Manufacturers</h1>
+<h1>Index</h1>
 
 <p>
-    <a asp-action="CreateOrEdit">Create New</a>
+    <a class="btn btn-dark" asp-action="CreateOrEdit">Create New</a>
 </p>
+
+@if (TempData["Error Message"] != null)
+{
+    <div class="alert alert-dismissible alert-danger">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>Error!</strong>
+        <p>@TempData["Error Message"].ToString()</p>
+    </div>
+}
+
+@if (TempData["Success Message"] != null)
+{
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>Success!</strong>
+        <p>@TempData["Success Message"].ToString()</p>
+    </div>
+}
+
+
+
 <table class="table table-hover table-dark table-bordered">
     <thead>
         <tr>
@@ -32,27 +53,28 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ZipCode)
-            </td>
-            <td>
-                <a asp-action="CreateOrEdit" asp-route-id="@item.ManufacturerId">Edit</a> |
-             </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ZipCode)
+                </td>
+                <td>
+                    <a asp-action="CreateOrEdit" asp-route-id="@item.ManufacturerId">Edit</a> |
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
